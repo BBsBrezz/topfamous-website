@@ -65,6 +65,35 @@ topfamous.com.tw 競爭搜尋排名。若日後要把這個網址當正式對外
 
 所有站內連結都是**相對路徑**,所以放在子目錄(例如 `example.com/topfamous/`)也能正常運作。
 
+## 正式部署前的檢查清單
+
+GitHub Pages 這份是給人過目的預覽版。要拿去當正式對外網站時,以下幾項**必須**處理,
+否則新站不會有搜尋曝光:
+
+1. **改掉 `docs/robots.txt`** —— 目前是 `Disallow: /`(為了避免預覽版跟正牌站搶排名而設)。
+   正式站若照這樣上線,Google 會完全不收錄。改成下面這樣即可:
+
+   ```
+   User-agent: *
+   Allow: /
+
+   Sitemap: https://你的網域/sitemap.xml
+   ```
+
+2. **修正 2 頁指向舊網域的 canonical** —— 其餘 162 頁都是相對路徑、會自動跟隨新網域,
+   但這兩頁寫死了舊網址,會把權重導去 topfamous.com.tw:
+   - `docs/index.html` → 指向 `https://topfamous.com.tw/首頁/`
+   - `docs/防護產品/臉部防護/index.html` → 指向 `https://topfamous.com.tw/服務項目/`(原站 Yoast 的設定錯誤,該頁其實不存在)
+
+   兩者都改成 `<link rel="canonical" href="index.html" />` 即可。
+
+3. **產生 sitemap.xml** —— 原站的 sitemap 由 Yoast 動態產生,靜態版沒有帶過來,需要自行產生一份放在網站根目錄。
+
+4. **若換新網域且舊站要下線**,記得在舊主機設 301 轉址到新網址,才能把既有的搜尋排名帶過去。
+
+5. **SEO 標籤改為直接編輯 HTML** —— 靜態版沒有 WordPress 後台,meta description、title
+   這些要直接改檔案裡的標籤,不再有 Yoast 介面。
+
 ## 已知限制
 
 以下是原站依賴 WordPress 後端的功能,靜態化後無法運作:
