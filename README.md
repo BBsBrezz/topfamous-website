@@ -12,7 +12,7 @@
 | 總大小 | 182 MB |
 
 ```
-site/
+docs/
 ├── index.html              首頁
 ├── 關於我們/  防護產品/  產品認證/  qa/  聯絡我們/    主要頁面
 ├── portfolio-item/         20 個產品明細頁
@@ -29,7 +29,7 @@ site/
 ## 本機預覽
 
 ```bash
-python3 -m http.server 8765 --directory site
+python3 -m http.server 8765 --directory docs
 ```
 
 開啟 http://localhost:8765 。
@@ -38,10 +38,10 @@ python3 -m http.server 8765 --directory site
 
 ## 部署
 
-把 `site/` 目錄整包上傳到任何靜態主機的根目錄即可,不需要 PHP、資料庫或任何後端:
+把 `docs/` 目錄整包上傳到任何靜態主機的根目錄即可,不需要 PHP、資料庫或任何後端:
 
 - 一般虛擬主機:整包丟進 `public_html/`
-- Cloudflare Pages / Netlify / Vercel / GitHub Pages:指定 `site` 為發布目錄
+- Cloudflare Pages / Netlify / Vercel / GitHub Pages:指定 `docs` 為發布目錄
 
 所有站內連結都是**相對路徑**,所以放在子目錄(例如 `example.com/topfamous/`)也能正常運作。
 
