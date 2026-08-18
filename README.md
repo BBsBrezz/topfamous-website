@@ -45,8 +45,12 @@ python3 -m http.server 8765 --directory docs
 本 repo 已設定由 `main` 分支的 `docs/` 目錄自動發布,推送後數分鐘內生效:
 
 ```bash
-git add -A && git commit -m "更新網站內容" && git push
+gh auth switch -u BBsBrezz && git add -A && git commit -m "更新網站內容" && git push
 ```
+
+> 這台機器的 gh 登入了兩個帳號,SSH 金鑰綁定的是 5G-HarryLu。此 repo 屬於
+> BBsBrezz,推送前必須先 `gh auth switch -u BBsBrezz`,否則會出現
+> `Permission denied` 。憑證由 gh 依「目前作用中帳號」即時提供,不會存成明文。
 
 `docs/robots.txt` 目前設為禁止搜尋引擎索引,避免這份副本與正牌的
 topfamous.com.tw 競爭搜尋排名。若日後要把這個網址當正式對外網站,
