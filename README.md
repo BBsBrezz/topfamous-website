@@ -3,6 +3,8 @@
 宏定科技有限公司網站(https://topfamous.com.tw)的完整靜態複製,抓取日期 2026-08-18。
 原站為 WordPress + Enfold 佈景主題;此版本已移除所有 WordPress 相依,是純靜態 HTML。
 
+**線上預覽:https://bbsbrezz.github.io/topfamous-website/**
+
 ## 內容
 
 | 項目 | 數量 |
@@ -37,6 +39,20 @@ python3 -m http.server 8765 --directory docs
 > 建議用上面的方式預覽,不要直接雙擊 HTML 檔。以 `file://` 開啟時瀏覽器會擋掉部分資源,顯示會不完整。
 
 ## 部署
+
+### GitHub Pages(目前使用中)
+
+本 repo 已設定由 `main` 分支的 `docs/` 目錄自動發布,推送後數分鐘內生效:
+
+```bash
+git add -A && git commit -m "更新網站內容" && git push
+```
+
+`docs/robots.txt` 目前設為禁止搜尋引擎索引,避免這份副本與正牌的
+topfamous.com.tw 競爭搜尋排名。若日後要把這個網址當正式對外網站,
+把該檔案內容改成 `Disallow:`(留空)即可。
+
+### 其他主機
 
 把 `docs/` 目錄整包上傳到任何靜態主機的根目錄即可,不需要 PHP、資料庫或任何後端:
 
