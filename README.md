@@ -40,59 +40,25 @@ python3 -m http.server 8765 --directory docs
 
 ## 部署
 
-### GitHub Pages(目前使用中)
+正式目標網址：https://topfamous.com.tw/ 。部署平台採 Cloudflare Pages，直接發布現有靜態檔案，無須 Node.js、PHP 或資料庫。
 
-本 repo 已設定由 `main` 分支的 `docs/` 目錄自動發布,推送後數分鐘內生效:
+- GitHub repository：`BBsBrezz/topfamous-website`
+- Production branch：`main`
+- Framework preset：`None`
+- Build command：留空
+- Build output directory：`docs`
 
-```bash
-gh auth switch -u BBsBrezz && git add -A && git commit -m "更新網站內容" && git push
-```
+`docs/robots.txt` 已允許索引，並指向正式網域的 `sitemap.xml`；首頁與臉部防護頁的 canonical 已修正。新增或移除頁面時需同步更新 sitemap。
 
-> 這台機器的 gh 登入了兩個帳號,SSH 金鑰綁定的是 5G-HarryLu。此 repo 屬於
-> BBsBrezz,推送前必須先 `gh auth switch -u BBsBrezz`,否則會出現
-> `Permission denied` 。憑證由 gh 依「目前作用中帳號」即時提供,不會存成明文。
+GitHub Pages 預覽網址仍為 https://bbsbrezz.github.io/topfamous-website/ 。
 
-`docs/robots.txt` 目前設為禁止搜尋引擎索引,避免這份副本與正牌的
-topfamous.com.tw 競爭搜尋排名。若日後要把這個網址當正式對外網站,
-把該檔案內容改成 `Disallow:`(留空)即可。
+### 網域切換注意事項
 
-### 其他主機
+Cloudflare Pages 綁定根網域前須完成 Cloudflare DNS zone 設定及 nameserver 切換。必須先匯出並核對原 DNS 全部記錄，保留郵件與其他服務。
 
-把 `docs/` 目錄整包上傳到任何靜態主機的根目錄即可,不需要 PHP、資料庫或任何後端:
+2026-09-21 公開 DNS 查詢顯示，原站 A 為 `43.254.17.23`，MX 指向 `topfamous.com.tw`，`mail` 亦為根網域的 CNAME。切換網站時，不能照搬這個郵件相依：須先確認郵件主機設定，讓 MX 與郵件服務繼續指向原伺服器且使用 DNS only，同時保留 SPF 原有授權、DKIM、DMARC。公開查詢不是完整 DNS 匯出。
 
-- 一般虛擬主機:整包丟進 `public_html/`
-- Cloudflare Pages / Netlify / Vercel / GitHub Pages:指定 `docs` 為發布目錄
-
-所有站內連結都是**相對路徑**,所以放在子目錄(例如 `example.com/topfamous/`)也能正常運作。
-
-## 正式部署前的檢查清單
-
-GitHub Pages 這份是給人過目的預覽版。要拿去當正式對外網站時,以下幾項**必須**處理,
-否則新站不會有搜尋曝光:
-
-1. **改掉 `docs/robots.txt`** —— 目前是 `Disallow: /`(為了避免預覽版跟正牌站搶排名而設)。
-   正式站若照這樣上線,Google 會完全不收錄。改成下面這樣即可:
-
-   ```
-   User-agent: *
-   Allow: /
-
-   Sitemap: https://你的網域/sitemap.xml
-   ```
-
-2. **修正 2 頁指向舊網域的 canonical** —— 其餘 162 頁都是相對路徑、會自動跟隨新網域,
-   但這兩頁寫死了舊網址,會把權重導去 topfamous.com.tw:
-   - `docs/index.html` → 指向 `https://topfamous.com.tw/首頁/`
-   - `docs/防護產品/臉部防護/index.html` → 指向 `https://topfamous.com.tw/服務項目/`(原站 Yoast 的設定錯誤,該頁其實不存在)
-
-   兩者都改成 `<link rel="canonical" href="index.html" />` 即可。
-
-3. **產生 sitemap.xml** —— 原站的 sitemap 由 Yoast 動態產生,靜態版沒有帶過來,需要自行產生一份放在網站根目錄。
-
-4. **若換新網域且舊站要下線**,記得在舊主機設 301 轉址到新網址,才能把既有的搜尋排名帶過去。
-
-5. **SEO 標籤改為直接編輯 HTML** —— 靜態版沒有 WordPress 後台,meta description、title
-   這些要直接改檔案裡的標籤,不再有 Yoast 介面。
+此設定說明不代表正式網域已完成切換；須另外確認 Cloudflare 部署、custom domain、HTTPS 與郵件 DNS。
 
 ## 已知限制
 
